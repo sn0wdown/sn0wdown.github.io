@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="介绍　　SSL相关的漏洞检测工具，包含如下漏洞：    1.OpenSSL HeartBleed Vulnerability (CVE-2014-0160)    2.OpenSSL CCS (MITM) Vulnerability (CVE-2014-0224)    3.Poodle SSLv3 Vulnerability (CVE-2014-3566)    4.WinShock SChan">
+<meta name="description" content="一个集成化工具，用于检测SSL相关安全漏洞">
 <meta name="keywords" content="SSL,漏洞验证">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SSL相关漏洞检测">
 <meta property="og:url" content="https://sn0wdown.github.io/2017/06/05/2017-06-06-SSL漏洞检测/index.html">
 <meta property="og:site_name" content="sn0wdown&#39;s blog">
-<meta property="og:description" content="介绍　　SSL相关的漏洞检测工具，包含如下漏洞：    1.OpenSSL HeartBleed Vulnerability (CVE-2014-0160)    2.OpenSSL CCS (MITM) Vulnerability (CVE-2014-0224)    3.Poodle SSLv3 Vulnerability (CVE-2014-3566)    4.WinShock SChan">
+<meta property="og:description" content="一个集成化工具，用于检测SSL相关安全漏洞">
 <meta property="og:image" content="https://cl.ly/3s0S3K093D0Z">
-<meta property="og:updated_time" content="2017-06-06T02:44:23.732Z">
+<meta property="og:updated_time" content="2017-06-06T03:41:58.844Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSL相关漏洞检测">
-<meta name="twitter:description" content="介绍　　SSL相关的漏洞检测工具，包含如下漏洞：    1.OpenSSL HeartBleed Vulnerability (CVE-2014-0160)    2.OpenSSL CCS (MITM) Vulnerability (CVE-2014-0224)    3.Poodle SSLv3 Vulnerability (CVE-2014-3566)    4.WinShock SChan">
+<meta name="twitter:description" content="一个集成化工具，用于检测SSL相关安全漏洞">
 <meta name="twitter:image" content="https://cl.ly/3s0S3K093D0Z">
 
 
@@ -386,8 +386,15 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>　　SSL相关的漏洞检测工具，包含如下漏洞：<br>    1.OpenSSL HeartBleed Vulnerability (CVE-2014-0160)<br>    2.OpenSSL CCS (MITM) Vulnerability (CVE-2014-0224)<br>    3.Poodle SSLv3 Vulnerability (CVE-2014-3566)<br>    4.WinShock SChannel Vulnerability (MS14-066)<br>    5.DROWN Attack (CVE-2016-0800)            </p>
-<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p><strong>利用代码</strong>  </p>
+        <p>一个集成化工具，用于检测SSL相关安全漏洞</p>
+<a id="more"></a>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>SSL相关的漏洞检测工具，包含如下漏洞：    </p>
+<pre><code>1. OpenSSL HeartBleed Vulnerability (CVE-2014-0160)  
+2. OpenSSL CCS (MITM) Vulnerability (CVE-2014-0224)  
+3. Poodle SSLv3 Vulnerability (CVE-2014-3566)  
+4. WinShock SChannel Vulnerability (MS14-066)  
+5. DROWN Attack (CVE-2016-0800)            
+</code></pre><h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p><strong>利用代码</strong>  </p>
 <blockquote>
 <p><a href="https://github.com/sn0wdown/MassBleed" target="_blank" rel="external">https://github.com/sn0wdown/MassBleed</a>    </p>
 </blockquote>
@@ -395,16 +402,17 @@
 <blockquote>
 <ul>
 <li>sh massbleed.sh [CIDR|IP] [single|port|subnet] [port] [proxy]  </li>
-<li>eg: ./massbleed 192.168.1.100</li>
+<li>eg: ./massbleed.sh 192.168.1.100</li>
 </ul>
 </blockquote>
-<p><strong>说明</strong><br>This script has four main functions with the ability to proxy all connections:</p>
+<p><strong>说明</strong>  </p>
+<p>This script has four main functions with the ability to proxy all connections:</p>
 <blockquote>
 <ul>
-<li>To mass scan any CIDR range for OpenSSL vulnerabilities via port 443/tcp (https) (example: sh massbleed.sh 192.168.0.0/16)  </li>
+<li>To mass scan any CIDR range for OpenSSL vulnerabilities via port 443/tcp (https)<br>(example: sh massbleed.sh 192.168.0.0/16)  </li>
 <li>To scan any CIDR range for OpenSSL vulnerabilities via any custom port specified (example: sh massbleed.sh 192.168.0.0/16 port 8443)  </li>
-<li>To individual scan every port (1-10000) on a single system for vulnerable versions of OpenSSL (example: sh massbleed.sh 127.0.0.1 single)  </li>
-<li>To scan every open port on every host in a single class C subnet for OpenSSL vulnerabilities (example: sh massbleed.sh 192.168.0. subnet)</li>
+<li>To individual scan every port (1-10000) on a single system for vulnerable versions of OpenSSL   (example: sh massbleed.sh 127.0.0.1 single)  </li>
+<li>To scan every open port on every host in a single class C subnet for OpenSSL vulnerabilities<br>(example: sh massbleed.sh 192.168.0. subnet)</li>
 </ul>
 </blockquote>
 <p><strong>案例</strong><br><img src="https://cl.ly/3s0S3K093D0Z" alt="测试图片"></p>
