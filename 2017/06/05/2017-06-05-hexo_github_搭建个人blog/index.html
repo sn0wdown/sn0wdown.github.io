@@ -100,7 +100,7 @@
 <meta property="og:url" content="https://sn0wdown.github.io/2017/06/05/2017-06-05-hexo_github_搭建个人blog/index.html">
 <meta property="og:site_name" content="sn0wdown&#39;s blog">
 <meta property="og:description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
-<meta property="og:updated_time" content="2017-06-06T06:24:36.889Z">
+<meta property="og:updated_time" content="2017-06-06T06:48:41.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo + github 搭建个人blog">
 <meta name="twitter:description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
@@ -412,6 +412,7 @@ categories 分类
 编写正文内容（MakeDown）  
 
 编写完，执行即可部署到github
+$ hexo clean
 $ hexo d -g
 </code></pre><h2 id="其它的配置"><a href="#其它的配置" class="headerlink" title="其它的配置"></a>其它的配置</h2><h3 id="加入阅读次数统计"><a href="#加入阅读次数统计" class="headerlink" title="加入阅读次数统计"></a>加入阅读次数统计</h3><p>在next主题里，已经引入了leancloud用于统计阅读次数，我们只需要启用即可，我们先要在leancloud网站注册创建帐户，记录我们创建的app_id和app_key，然后在<code>主题配置</code>文件中搜索leancloud,填写我们对应的值即可  </p>
 <pre><code>leancloud_visitors:  
