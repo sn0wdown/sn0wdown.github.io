@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此过程中，折腾博客的各种配置以及功能占具了我一部分时间，在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
+<meta name="description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
 <meta name="keywords" content="hexo,blog">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hexo + github 搭建个人blog">
 <meta property="og:url" content="https://sn0wdown.github.io/2017/06/05/hexo-github-搭建个人blog/index.html">
 <meta property="og:site_name" content="sn0wdown&#39;s blog">
-<meta property="og:description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此过程中，折腾博客的各种配置以及功能占具了我一部分时间，在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
-<meta property="og:updated_time" content="2017-06-05T07:17:52.250Z">
+<meta property="og:description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
+<meta property="og:updated_time" content="2017-06-06T06:24:36.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo + github 搭建个人blog">
-<meta name="twitter:description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此过程中，折腾博客的各种配置以及功能占具了我一部分时间，在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
+<meta name="twitter:description" content="现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。">
 
 
 
@@ -384,43 +384,78 @@
       
 
       
-        <p>现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此过程中，折腾博客的各种配置以及功能占具了我一部分时间，在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。</p>
+        <p>现在越来越多的人喜欢利用Github搭建静态网站，原因不外乎简单省钱。本人也利用hexo+github搭建了本博客，用于分享一些心得。在此详细记录下我是如何利用hexo+github搭建静态博客以及一些配置相关问题，以免过后遗忘，且当备份之用。</p>
 <a id="more"></a>
-<p>准备工作</p>
-<pre><code>下载node.js并安装（官网下载安装），默认会安装npm。
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><pre><code>下载node.js并安装（官网下载安装），默认会安装npm。
 下载安装git（官网下载安装）
-下载安装hexo。方法：打开cmd 运行npm install -g hexo（要翻墙）
-</code></pre><p>本地搭建hexo静态博客</p>
-<pre><code>新建一个文件夹，如MyBlog
-进入该文件夹内，右击运行git，输入：hexo init（生成hexo模板，可能要翻墙）
-生成完模板，运行npm install（目前貌似不用运行这一步）
-最后运行：hexo server （运行程序，访问本地localhost:4000可以看到博客已经搭建成功）
-</code></pre><p>将博客与Github关联</p>
-<pre><code>在Github上创建名字为XXX.github.io的项目，XXX为自己的github用户名。
+下载安装hexo。方法：打开cmd或git 运行  
+$ npm install -g hexo-cli
+</code></pre><h2 id="本地搭建hexo静态博客"><a href="#本地搭建hexo静态博客" class="headerlink" title="本地搭建hexo静态博客"></a>本地搭建hexo静态博客</h2><p>安装 Hexo 完成后，请执行下列命令，Hexo 将会在指定文件夹中新建所需要的文件。  </p>
+<pre><code>$ hexo init &lt;folder&gt;  
+$ cd &lt;folder&gt;  
+$ npm install  
+</code></pre><h2 id="将博客与Github关联"><a href="#将博客与Github关联" class="headerlink" title="将博客与Github关联"></a>将博客与Github关联</h2><p>在<code>Github</code>上创建名字为<code>XXX.github.io</code>的项目，<code>XXX</code>为自己的<code>github</code>用户名,添加<code>SSH</code>公钥到<code>Account settings</code> -&gt; <code>SSH Keys</code> -&gt; <code>Add SSH Key</code>,打开本地的项目内的<code>_config.yml</code>配置文件，找d到deploy字段,将其中的<code>type</code>设置为<code>git</code></p>
+<pre><code>deploy:
+  type: git
+  repository: https://github.com/yourname/yourname.github.io.git
+  branch: master
 
-打开本地的MyBlog文件夹项目内的_config.yml配置文件，将其中的type设置为git
-</code></pre><p>deploy:<br>  type: git<br>  repository: <a href="https://github.com/tengzhangchao/tengzhangchao.github.io.git" target="_blank" rel="external">https://github.com/tengzhangchao/tengzhangchao.github.io.git</a><br>  branch: master</p>
-<pre><code>运行：npm install hexo-deployer-git –save
+运行：npm install hexo-deployer-git –save
 运行：hexo g（本地生成静态文件）
 运行：hexo d（将本地静态文件推送至Github）
-</code></pre><p>此时，打开浏览器，访问<a href="http://tengzhangchao.github.io" target="_blank" rel="external">http://tengzhangchao.github.io</a><br>绑定域名</p>
-<p>　<br>    运行：hexo g<br>    运行：hexo d</p>
-<p>更新博客内容</p>
-<p>　　至此博客已经搭建完毕，域名也已经正常解析，那么剩下的问题就是更新内容了。<br>更新文章</p>
-<pre><code>在MyBlog目录下执行：hexo new “我的第一篇文章”，会在source-&gt;_posts文件夹内生成一个.md文件。
-编辑该文件（遵循Markdown规则）
-修改起始字段
-    title 文章的标题
-    date 创建日期 （文件的创建日期 ）
-    updated 修改日期 （ 文件的修改日期）
-    comments 是否开启评论 true
-    tags 标签
-    categories 分类
-    permalink url中的名字（文件名）
-编写正文内容（MakeDown）
-hexo clean 删除本地静态文件（Public目录），可不执行。
-hexo g 生成本地静态文件（Public目录）
-hexo deploy 将本地静态文件推送至github（hexo d）
+</code></pre><p>此时，打开浏览器，访问<code>http://yourname.github.io</code></p>
+<h2 id="更新文章"><a href="#更新文章" class="headerlink" title="更新文章"></a>更新文章</h2><p>在项目目录下执行：<code>hexo new</code> “我的第一篇文章”，会在<code>source-&gt;_posts</code>文件夹内生成一个<code>.md</code>文件。编辑该文件（遵循Markdown规则）修改起始字段  </p>
+<pre><code>title 文章的标题
+date 创建日期 （文件的创建日期 ）
+tags 标签
+categories 分类
+编写正文内容（MakeDown）  
+
+编写完，执行即可部署到github
+$ hexo d -g
+</code></pre><h2 id="其它的配置"><a href="#其它的配置" class="headerlink" title="其它的配置"></a>其它的配置</h2><h3 id="加入阅读次数统计"><a href="#加入阅读次数统计" class="headerlink" title="加入阅读次数统计"></a>加入阅读次数统计</h3><p>在next主题里，已经引入了leancloud用于统计阅读次数，我们只需要启用即可，我们先要在leancloud网站注册创建帐户，记录我们创建的app_id和app_key，然后在<code>主题配置</code>文件中搜索leancloud,填写我们对应的值即可  </p>
+<pre><code>leancloud_visitors:  
+  enable: true  
+  app_id: tenS5cAVxxxxxxxxxVrVD-gzGzoHsz  
+  app_key: Sme2xxxxxxxxxxxxxxBG  
+</code></pre><h3 id="添加友链"><a href="#添加友链" class="headerlink" title="添加友链"></a>添加友链</h3><p>在<code>主题配置</code>文件中搜索link,按如下格式添加即可</p>
+<pre><code>links_title: 友情链接  
+links_layout: block  
+links_layout: inline  
+links:
+  aptx&apos;s blog: https://aptx0.github.io/  
+  Urahara&apos;s blog: http://reverse-tcp.xyz/   
+</code></pre><p>添加其它社区链接的话，找到social字段添加对应链接即可    </p>
+<pre><code>social: 
+  freebuf: http://www.freebuf.com
+  先知社区: https://xianzhi.aliyun.com/forum/
+</code></pre><h3 id="自定义new命令新建文章模板"><a href="#自定义new命令新建文章模板" class="headerlink" title="自定义new命令新建文章模板"></a>自定义new命令新建文章模板</h3><p>执行new命令，生成指定名称的文章至<code>hexo\source\_posts\postName.md</code></p>
+<pre><code>hexo new [layout] &quot;postName&quot; #新建文章
+</code></pre><p>其中<code>layout</code>是可选参数，默认值为<code>post</code>。有哪些<code>layout</code>呢，请到<code>scaffolds</code>目录下查看，这些文件名称就是<code>layout</code>名称。当然你可以添加自己的<code>layout</code>，方法就是添加一个文件即可，同时你也可以编辑现有的<code>layout</code>，比如<code>post</code>的<code>layout</code>默认是<code>hexo\scaffolds\post.md</code></p>
+<p>生成带照片的文章：<br>新建<code>hexo\scaffolds\photo.md</code>文件</p>
+<pre><code>---
+layout: {{ layout }}
+title: {{ title }}
+date: {{ date }}
+tags: 
+categories: 
+photos: 
+-
+---
+</code></pre><p>然后每次可以执行带layout的new命令生成照片文章：</p>
+<pre><code>hexo new photo &quot;photoPostName&quot; #新建照片文章
+</code></pre><h3 id="点击出现心形"><a href="#点击出现心形" class="headerlink" title="点击出现心形"></a>点击出现心形</h3><p>将 <a href="https://github.com/Neveryu/Neveryu.github.io/blob/master/js/src/love.js" target="_blank" rel="external">love.js</a> 文件添加到 \themes\next\source\js\src 文件目录下。<br>找到 \themes\next\layout_layout.swing 文件， 在文件的后面， 标签之前 添加以下代码：</p>
+<pre><code>&lt;!-- 页面点击小红心 --&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/js/src/love.js&quot;&gt;&lt;/script&gt;
+</code></pre><h3 id="一些常用的命令"><a href="#一些常用的命令" class="headerlink" title="一些常用的命令"></a>一些常用的命令</h3><pre><code>hexo new &quot;postName&quot; #新建文章  
+hexo new page &quot;pageName&quot; #新建页面  
+hexo generate #生成静态页面至public目录  
+hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）  
+hexo deploy #将.deploy目录部署到GitHub  
+hexo help  #查看帮助    
+hexo version  #查看Hexo的版本
+</code></pre><h3 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h3><pre><code>问：如何让文章想只显示一部分和一个 阅读全文 的按钮？   
+答：在文章中加一个 &lt;!--more--&gt; ， &lt;!--more--&gt; 后面的内容就不会显示出来了。
 </code></pre>
       
     </div>
@@ -520,8 +555,17 @@ hexo deploy 将本地静态文件推送至github（hexo d）
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/upload_image/pic.jpg"
@@ -621,6 +665,22 @@ hexo deploy 将本地静态文件推送至github（hexo d）
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地搭建hexo静态博客"><span class="nav-number">2.</span> <span class="nav-text">本地搭建hexo静态博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将博客与Github关联"><span class="nav-number">3.</span> <span class="nav-text">将博客与Github关联</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新文章"><span class="nav-number">4.</span> <span class="nav-text">更新文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它的配置"><span class="nav-number">5.</span> <span class="nav-text">其它的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加入阅读次数统计"><span class="nav-number">5.1.</span> <span class="nav-text">加入阅读次数统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加友链"><span class="nav-number">5.2.</span> <span class="nav-text">添加友链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义new命令新建文章模板"><span class="nav-number">5.3.</span> <span class="nav-text">自定义new命令新建文章模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#点击出现心形"><span class="nav-number">5.4.</span> <span class="nav-text">点击出现心形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些常用的命令"><span class="nav-number">5.5.</span> <span class="nav-text">一些常用的命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-amp-A"><span class="nav-number">5.6.</span> <span class="nav-text">Q&A</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
