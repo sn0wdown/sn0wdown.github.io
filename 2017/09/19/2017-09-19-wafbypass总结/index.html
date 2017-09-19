@@ -100,7 +100,7 @@
 <meta property="og:url" content="https://sn0wdown.github.io/2017/09/19/2017-09-19-wafbypass总结/index.html">
 <meta property="og:site_name" content="sn0wdown&#39;s blog">
 <meta property="og:description" content="关于waf bypass的一些汇总和总结，大部分资源来自网络，仅供自己学习总结">
-<meta property="og:updated_time" content="2017-09-19T08:47:50.267Z">
+<meta property="og:updated_time" content="2017-09-19T08:53:41.728Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="wafbypass总结">
 <meta name="twitter:description" content="关于waf bypass的一些汇总和总结，大部分资源来自网络，仅供自己学习总结">
@@ -453,19 +453,21 @@ Content-Disposition: form-data; name=”file”; filename=’abc.php’
 </code></pre><h3 id="从规则缺陷bypass-waf"><a href="#从规则缺陷bypass-waf" class="headerlink" title="从规则缺陷bypass waf"></a>从规则缺陷bypass waf</h3><p>对基于正则表达式的WAF，绕过WAF规则主要思考安全工程师写WAF规则时在想什么，容易忽略什么，推断一些可能绕过的方式，然后多次尝试进行验证。比起完整罗列绕过CASE，我更喜欢分析绕过思路。这次以最受关注的SQL注入、文件包含为例，分析一下绕过思路。</p>
 <h4 id="SQL注入绕过"><a href="#SQL注入绕过" class="headerlink" title="SQL注入绕过"></a><strong>SQL注入绕过</strong></h4><p>绕过SQL注入规则主要利用WAF规则本身的问题、未考虑到SQL语法变形、及后端数据库SQL语句语法特性。不同的数据库虽然遵守SQL标准，但是通常会加入特有的语法。WAF的防御策略要兼顾各种数据库的特殊语法，容易遗漏，从而被利用绕过WAF。以下MySQL为例，分析绕过SQL注入的一些思路。</p>
 <p>1) <em>注释符绕过</em></p>
-<p>/<em>xxx</em>/是注释，也可以充当空白符。因为 /<strong>/可使得MySQL对sql语句(union/</strong>/select)词法解析成功。事实上许多WAF都考虑到/<em>*/可以作为空白符，但是waf检测 /\</em>.<em>\</em>/ 很消耗性能，工程师会折中，可能在检测中间引入一些特殊字符，例如：/<em>\w+</em>/。或者，WAF可能只中间检查n个字符/*.{,n}*/。根据以上想法，可以逐步测试绕过方法：</p>
-<pre><code>先测试最基本的：union/**/select
+<pre><code>/*xxx*/是注释，也可以充当空白符。因为 /**/可使得MySQL对sql语句(union/**/select)词法解析成功。事实上许多WAF都考虑到/**/可以作为空白符，但是waf检测 /\*.*\*/ 很消耗性能，工程师会折中，可能在检测中间引入一些特殊字符，例如：/*\w+*/。或者，WAF可能只中间检查n个字符/\*.{,n}\*/。根据以上想法，可以逐步测试绕过方法：
+
+先测试最基本的：union/**/select
 再测试中间引入特殊字：union/*aaaa%01bbs*/select
 最后测试注释长度：union*aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/select
-</code></pre><p>同理，对于/<em>!xxx</em>/，可以采取类似的思路绕过WAF。 </p>
-<p>2) <em>空白符绕过</em></p>
+
+同理，对于/*!xxx*/，可以采取类似的思路绕过WAF。 
+</code></pre><p>2) <em>空白符绕过</em></p>
 <p>基于正则表达式的WAF， SQL注入规则使用正则表达式的“\s”匹配空格，例如”select\s+union”。利用正则表达式的空白符与MySQL空白符的不同可绕过WAF规则。如何这些MySQL的特性? 通过fuzz,每次更改正常SQL语句的某部分，替换为其他字符，判断语法是否正确，即可判断出来MySQL语法特性。当然，也可以通过分析MySQL词法来发现语法特性，从而找到绕过方法。</p>
 <p>利用空白符进行绕过，测试WAF时尽可能减少其他原因的影响，例如”union select”被拦截，只需把中间空白符替换为”%250C”, “%25A0”进行绕过测试。</p>
 <pre><code>union%250Cselect
 union%25A0select
 
 | MySQL的空白字符    | %09,%0A,%0B,%0C,%0D,%20,%A0,/*xx*/     
-| 正则表达式空白字符  |   %09,%0A,%0B,%0D,%20  
+| 正则表达式空白字符  | %09,%0A,%0B,%0D,%20  
 </code></pre><p>3) <em>函数分隔符</em></p>
 <p>对基于正则表达式的WAF，我们猜测安全工程师写WAF规则时，可能不知道函数名与左括号之间可以存在特殊字符，或者遗漏可以存在特殊字符。例如匹配函数”concat()”的规则写法，“concat(”或者”concat\s*(”，就没有考虑到一些特殊字符。相应的绕过方法，在特殊位置引入特殊的分隔符，逐个测试。这些特殊分隔符发现也是通过Fuzz出来的。</p>
 <pre><code>concat%2520(
@@ -541,7 +543,7 @@ id=2312 union select &quot;1&quot;,user()
 id={xsad 12321} and {x sleep(1)}   
 id=1 and {xxsadasdas sleep(1)}  
 id={asdqwe @} union select (select {12312adas user} from {dasweq mysql.user} limit 1),{asdqwe user()}
-</code></pre><h1 id="参考来源"><a href="#参考来源" class="headerlink" title="参考来源"></a>参考来源</h1><p><a href="http://www.mottoin.com/86886.html" target="_blank" rel="external">WAF攻防研究之四个层次Bypass WAF — 破见</a></p>
+</code></pre><h2 id="参考来源"><a href="#参考来源" class="headerlink" title="参考来源"></a>参考来源</h2><p><a href="http://www.mottoin.com/86886.html" target="_blank" rel="external">WAF攻防研究之四个层次Bypass WAF — 破见</a></p>
 
       
     </div>
@@ -759,7 +761,7 @@ id={asdqwe @} union select (select {12312adas user} from {dasweq mysql.user} lim
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#waf攻防研究的4个层次"><span class="nav-number">1.</span> <span class="nav-text">waf攻防研究的4个层次</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从架构层bypass-waf"><span class="nav-number">1.1.</span> <span class="nav-text">从架构层bypass waf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#寻找源站"><span class="nav-number">1.1.1.</span> <span class="nav-text">寻找源站</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用同网段"><span class="nav-number">1.1.2.</span> <span class="nav-text">利用同网段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用边界漏洞"><span class="nav-number">1.1.3.</span> <span class="nav-text">利用边界漏洞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从资源层bypass-waf"><span class="nav-number">1.2.</span> <span class="nav-text">从资源层bypass waf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从协议层bypass-waf"><span class="nav-number">1.3.</span> <span class="nav-text">从协议层bypass waf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#协议未覆盖绕过waf"><span class="nav-number">1.3.1.</span> <span class="nav-text">协议未覆盖绕过waf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用协议解析不一致绕过WAF"><span class="nav-number">1.3.2.</span> <span class="nav-text">利用协议解析不一致绕过WAF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用协议解析问题绕过WAF文件上传"><span class="nav-number">1.3.3.</span> <span class="nav-text">利用协议解析问题绕过WAF文件上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数污染"><span class="nav-number">1.3.4.</span> <span class="nav-text">参数污染</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从规则缺陷bypass-waf"><span class="nav-number">1.4.</span> <span class="nav-text">从规则缺陷bypass waf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL注入绕过"><span class="nav-number">1.4.1.</span> <span class="nav-text">SQL注入绕过</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件包含绕过"><span class="nav-number">1.4.2.</span> <span class="nav-text">文件包含绕过</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-bypass小结"><span class="nav-number">2.</span> <span class="nav-text">MySQL bypass小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#空白符替换"><span class="nav-number">2.1.</span> <span class="nav-text">空白符替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union姿势变换"><span class="nav-number">2.2.</span> <span class="nav-text">union姿势变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-select-分割姿势"><span class="nav-number">2.3.</span> <span class="nav-text">union select 分割姿势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-连接字段姿势"><span class="nav-number">2.4.</span> <span class="nav-text">select 连接字段姿势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL特殊用法：任意插入-随机字符-0b-目标值"><span class="nav-number">2.5.</span> <span class="nav-text">MySQL特殊用法：任意插入{[随机字符]%0b[目标值]}</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考来源"><span class="nav-number"></span> <span class="nav-text">参考来源</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#waf攻防研究的4个层次"><span class="nav-number">1.</span> <span class="nav-text">waf攻防研究的4个层次</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从架构层bypass-waf"><span class="nav-number">1.1.</span> <span class="nav-text">从架构层bypass waf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#寻找源站"><span class="nav-number">1.1.1.</span> <span class="nav-text">寻找源站</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用同网段"><span class="nav-number">1.1.2.</span> <span class="nav-text">利用同网段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用边界漏洞"><span class="nav-number">1.1.3.</span> <span class="nav-text">利用边界漏洞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从资源层bypass-waf"><span class="nav-number">1.2.</span> <span class="nav-text">从资源层bypass waf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从协议层bypass-waf"><span class="nav-number">1.3.</span> <span class="nav-text">从协议层bypass waf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#协议未覆盖绕过waf"><span class="nav-number">1.3.1.</span> <span class="nav-text">协议未覆盖绕过waf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用协议解析不一致绕过WAF"><span class="nav-number">1.3.2.</span> <span class="nav-text">利用协议解析不一致绕过WAF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用协议解析问题绕过WAF文件上传"><span class="nav-number">1.3.3.</span> <span class="nav-text">利用协议解析问题绕过WAF文件上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数污染"><span class="nav-number">1.3.4.</span> <span class="nav-text">参数污染</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从规则缺陷bypass-waf"><span class="nav-number">1.4.</span> <span class="nav-text">从规则缺陷bypass waf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL注入绕过"><span class="nav-number">1.4.1.</span> <span class="nav-text">SQL注入绕过</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件包含绕过"><span class="nav-number">1.4.2.</span> <span class="nav-text">文件包含绕过</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-bypass小结"><span class="nav-number">2.</span> <span class="nav-text">MySQL bypass小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#空白符替换"><span class="nav-number">2.1.</span> <span class="nav-text">空白符替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union姿势变换"><span class="nav-number">2.2.</span> <span class="nav-text">union姿势变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-select-分割姿势"><span class="nav-number">2.3.</span> <span class="nav-text">union select 分割姿势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-连接字段姿势"><span class="nav-number">2.4.</span> <span class="nav-text">select 连接字段姿势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL特殊用法：任意插入-随机字符-0b-目标值"><span class="nav-number">2.5.</span> <span class="nav-text">MySQL特殊用法：任意插入{[随机字符]%0b[目标值]}</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考来源"><span class="nav-number">3.</span> <span class="nav-text">参考来源</span></a></li></ol></div>
             
 
           </div>
